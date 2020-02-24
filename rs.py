@@ -1,3 +1,4 @@
+import sys
 import threading
 import time
 import random
@@ -27,5 +28,7 @@ def server():
     exit()
 
 
-rsthread = threading.Thread(name='server', target=server)
-rsthread.start()
+if (len(sys.argv) == 2):
+    if(sys.argv[1] == "rsListenPort"):
+        rsthread = threading.Thread(name='server', target=server)
+        rsthread.start()

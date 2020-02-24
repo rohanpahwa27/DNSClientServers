@@ -1,4 +1,5 @@
 #client task
+import sys
 import threading
 import time
 import random
@@ -26,8 +27,9 @@ def client():
     cs.close()
     exit()
 
-cthread = threading.Thread(name='client', target=client)
-cthread.start()
-
-input("Hit ENTER  to exit")
+if (len(sys.argv) == 4):
+    if (sys.argv[1] == "rsHostname" and sys.argv[2] == "rsListenPort" and sys.argv[3] == "tsListenPort"):
+        cthread = threading.Thread(name='client', target=client)
+        cthread.start()
+        input("Hit ENTER  to exit")
 # exit()
