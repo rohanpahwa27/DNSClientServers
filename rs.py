@@ -3,6 +3,23 @@ import threading
 import time
 import random
 import socket as mysoc
+from collections import defaultdict
+
+
+RSdict = defaultdict(list)
+# Structure of RSdict:
+
+# RSdict = {
+
+# 'Hostname': ['link1','link2','link3']
+# 'IP Address': ['ipaddr1', 'ipaddr2','ipaddr3']
+# 'Flag': ['flag1','flag2','flag3']
+
+# }
+
+# Structure of RSdict
+
+
 
 # server task
 def server():
@@ -26,6 +43,33 @@ def server():
 
     ss.close()
     exit()
+
+
+
+
+data = []
+f = open('PROJI-DNSRS.txt','r')
+while True:
+  line = f.readline()
+  if not line:
+    break
+  currline = line.strip() #gets line as words per line
+  data.append(currline.split()) #separates each word in line into entries in self-generated list
+
+
+filelen = len(data)
+
+for i in range(3): #traversing over HN, IPADDR, FL, populates RSDict
+  for j in range(filelen):
+    if i+1 == 1:
+      RSdict['Hostname'].append(data[j][i])
+    if i+1 == 2:
+      RSdict['IP Address'].append(data[j][i])
+    if i+1 == 3:
+      RSdict['Flag'].append(data[j][i])
+
+
+print(RSdict)
 
 
 # how to read a text file in python
