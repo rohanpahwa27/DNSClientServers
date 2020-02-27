@@ -64,7 +64,7 @@ for i in range(3): #traversing over HN, IPADDR, FL, populates RSDict
       TSdict['Flag'].append(data[j][i])
 
 
-print(TSdict)
+#print(TSdict)
 
 
 if (len(sys.argv) == 2):

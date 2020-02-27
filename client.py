@@ -49,14 +49,14 @@ while True:
 
 filelen = len(data)
 
- #traversing over HN, IPADDR, FL, populates RSDict
+ #traversing over HN
 for j in range(filelen):
   CLdict['Hostname'].append(data[j][0])
 
 
 
 
-print(CLdict)
+#print(CLdict)
 
 
 if (len(sys.argv) == 4):

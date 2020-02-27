@@ -69,7 +69,7 @@ for i in range(3): #traversing over HN, IPADDR, FL, populates RSDict
       RSdict['Flag'].append(data[j][i])
 
 
-print(RSdict)
+#print(RSdict)
 
 
 # how to read a text file in python
