@@ -28,6 +28,15 @@ def server():
     exit()
 
 
+# how to read a text file in python
+# with open("PROJI-DNSRS.txt") as f:
+#   while True:
+#     c = f.read(1)
+#     print("".join(["EOF: ", c]))
+#     if not c:
+#       print ("End of file")
+#       break
+#     print ("".join(["Read a character:",c," ","hi"]))
 if (len(sys.argv) == 2):
     if(sys.argv[1] == "rsListenPort"):
         rsthread = threading.Thread(name='server', target=server)
