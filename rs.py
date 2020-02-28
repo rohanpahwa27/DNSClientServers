@@ -41,6 +41,15 @@ def server():
     msg="Welcome to CS 352"
     csockid.send(msg.encode('utf-8')) 
 
+    #gets length of strings being sent by client
+    lenth_of_client = int(csockid.recv(1).decode())
+
+    #prints out the data received from client
+    for j in range(lenth_of_client):
+        #print(RSdict.get('Hostname')[j])
+        data = csockid.recv(24).decode()
+        print ("hi",data,"hi")
+
     ss.close()
     exit()
 
@@ -68,8 +77,7 @@ for i in range(3): #traversing over HN, IPADDR, FL, populates RSDict
     if i+1 == 3:
       RSdict['Flag'].append(data[j][i])
 
-
-#print(RSdict)
+# print(RSdict)
 
 
 # how to read a text file in python
