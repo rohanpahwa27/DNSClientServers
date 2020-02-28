@@ -28,7 +28,7 @@ def server():
         print("[S]: Server socket created")
     except mysoc.error as err:
         print(err)
-    server_binding=('',52799)
+    server_binding=('',52800)
     ss.bind(server_binding)
     ss.listen(1)
     host=mysoc.gethostname()
@@ -47,8 +47,9 @@ def server():
     #prints out the data received from client
     for j in range(lenth_of_client):
         #print(RSdict.get('Hostname')[j])
-        data = csockid.recv(24).decode()
-        print ("hi",data,"hi")
+        data = csockid.recv(1024).decode()
+        lines = data.strip()
+        print ("hi",lines,"hi")
 
     ss.close()
     exit()

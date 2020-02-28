@@ -23,7 +23,7 @@ def client():
         print(err)
 
 # Define the port on which you want to connect to the server
-    port = 52799
+    port = 52800
     sa_sameas_myaddr =mysoc.gethostbyname(mysoc.gethostname())
 # connect to the server on local machine
     server_binding=(sa_sameas_myaddr,port)
@@ -40,8 +40,9 @@ def client():
     #sends actual strings to root server (line by line)
     for j in range(len(CLdict.get('Hostname'))):
         print(CLdict.get('Hostname')[j])
-        cs.send(CLdict.get('Hostname')[j].encode())
-    
+        #fs = "fye"
+        cs.send(CLdict.get('Hostname')[j].encode('utf-8'))
+        time.sleep(0.1)
 
     
     cs.close()
