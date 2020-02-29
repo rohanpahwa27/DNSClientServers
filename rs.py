@@ -44,13 +44,23 @@ def server():
     #gets length of strings being sent by client
     lenth_of_client = int(csockid.recv(1).decode())
 
+    CLdata = []
     #prints out the data received from client
     for j in range(lenth_of_client):
         #print(RSdict.get('Hostname')[j])
         data = csockid.recv(1024).decode()
         lines = data.strip()
-        print ("hi",lines,"hi")
+        CLdata.append(lines)
 
+
+    # print(CLdata)
+    for i in range (len(CLdata)):
+        if(CLdata[i] in RSdict.get("Hostname")):
+            index = RSdict.get("Hostname").index(CLdata[i])
+            f = open("RESOLVED.txt", "a")
+            f.write(CLdata[i]+ " "+RSdict.get("IP Address")[index]+" "+RSdict.get("Flag")[index]+"\n")
+        # else: go back to client with a string to lookup in ts.py but will have to open that socket too
+            
     ss.close()
     exit()
 
@@ -78,7 +88,7 @@ for i in range(3): #traversing over HN, IPADDR, FL, populates RSDict
     if i+1 == 3:
       RSdict['Flag'].append(data[j][i])
 
-# print(RSdict)
+#print(RSdict)
 
 
 # how to read a text file in python
