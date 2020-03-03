@@ -15,6 +15,21 @@ CLdict = defaultdict(list)
 
 # Structure of CLdict
 
+def clientToTs(host):
+    try:
+        ts=mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
+        print("[C]: Client socket created")
+    except mysoc.error as err:
+        print(err)
+    port = 52799
+    tsa_sameas_myaddr =mysoc.gethostbyname(mysoc.gethostname())
+# connect to the server on local machine
+    tsserver_binding=(tsa_sameas_myaddr,port)
+    ts.connect(tsserver_binding)
+    ts.send(host.encode())
+    ts.close()
+    exit()
+
 def client():
     try:
         cs=mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
@@ -29,6 +44,24 @@ def client():
     server_binding=(sa_sameas_myaddr,port)
     cs.connect(server_binding)
 
+
+
+    #connect to ts socket
+    try:
+        ts=mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
+        print("[C]: Client socket created")
+    except mysoc.error as err:
+        print(err)
+    port = 52799
+    tsa_sameas_myaddr =mysoc.gethostbyname(mysoc.gethostname())
+# connect to the server on local machine
+    tsserver_binding=(tsa_sameas_myaddr,port)
+    ts.connect(tsserver_binding)
+
+
+
+
+
     data_from_server=cs.recv(100)
 #receive data from the server
 
@@ -36,15 +69,33 @@ def client():
 
     #sends length of strings to send to root server to check if its there
     cs.send(str(len(CLdict.get('Hostname'))).encode())
+    
 
     #sends actual strings to root server (line by line)
+    f = open("RESOLVED.txt", "a")
     for j in range(len(CLdict.get('Hostname'))):
-        print(CLdict.get('Hostname')[j])
         #fs = "fye"
         cs.send(CLdict.get('Hostname')[j].encode('utf-8'))
         time.sleep(0.1)
+        data = cs.recv(1024).decode()
+        if (data[len(data)-1] == 'A'):
+            print(CLdict.get('Hostname')[j],"received")
+            f.write(data+"\n")
+        else:
+            print(CLdict.get('Hostname')[j])
+            ts.send(data.encode())
+            time.sleep(0.1)
+            data = ts.recv(1024).decode()
+            lines = data.split()
+            if (len(lines) == 1):
+                f.write(data+" - Error:HOST NOT FOUND"+"\n")
+            else:
+                f.write(data+"\n")
+            print("-----------", lines)
+            
+            
 
-    
+    ts.close()
     cs.close()
     exit()
 
@@ -62,7 +113,7 @@ filelen = len(data)
 
  #traversing over HN
 for j in range(filelen):
-  CLdict['Hostname'].append(data[j][0])
+  CLdict['Hostname'].append(data[j][0].lower())
 
 # for j in range(len(CLdict.get('Hostname'))):
 #     print(CLdict.get('Hostname')[j])
@@ -73,7 +124,7 @@ for j in range(filelen):
 
 if (len(sys.argv) == 4):
     if (sys.argv[1] == "rsHostname" and sys.argv[2] == "rsListenPort" and sys.argv[3] == "tsListenPort"):
-        cthread = threading.Thread(name='client', target=client)
-        cthread.start()
-        input("Hit ENTER  to exit")
+        rsthread = threading.Thread(name='client', target=client)
+        rsthread.start()
+        # input("Hit ENTER  to exit")
 # exit()

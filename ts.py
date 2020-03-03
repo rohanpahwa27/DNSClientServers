@@ -35,8 +35,21 @@ def server():
     csockid,addr=ss.accept()
     print ("[S]: Got a connection request from a client at", addr)
 # send a intro  message to the client.
-    msg="Welcome to CS 352"
-    csockid.send(msg.encode('utf-8')) 
+
+    while 1:
+      time.sleep(0.1)
+      data = csockid.recv(1024).decode()
+      if not data:
+        break
+      data = data.strip()
+      lines = data.split('-')
+      if (lines[0].strip() in TSdict.get("Hostname")):
+        index = TSdict.get("Hostname").index(lines[0].strip())
+        csockid.send((lines[0].strip()+" "+TSdict.get("IP Address")[index]+" "+TSdict.get("Flag")[index]).encode())
+        print((lines[0].strip()+" "+TSdict.get("IP Address")[index]+" "+TSdict.get("Flag")[index]))
+      else:
+        print(lines[0].strip()," not found in TS")
+        csockid.send(lines[0].strip().encode())
 
     ss.close()
     exit()
@@ -57,7 +70,7 @@ filelen = len(data)
 for i in range(3): #traversing over HN, IPADDR, FL, populates RSDict
   for j in range(filelen):
     if i+1 == 1:
-      TSdict['Hostname'].append(data[j][i])
+      TSdict['Hostname'].append(data[j][i].lower())
     if i+1 == 2:
       TSdict['IP Address'].append(data[j][i])
     if i+1 == 3:

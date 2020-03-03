@@ -50,15 +50,25 @@ def server():
         #print(RSdict.get('Hostname')[j])
         data = csockid.recv(1024).decode()
         lines = data.strip()
-        CLdata.append(lines)
+        print(lines)
+        #CLdata.append(lines)
+        if(lines in RSdict.get("Hostname")):
+          index = RSdict.get("Hostname").index(lines)
+          csockid.send((lines+" "+RSdict.get("IP Address")[index]+" "+RSdict.get("Flag")[index]).encode())
+        else:
+          data += " - NS"
+          csockid.send(data.encode())
+        # time.sleep(.1)
 
 
     # print(CLdata)
     for i in range (len(CLdata)):
         if(CLdata[i] in RSdict.get("Hostname")):
-            index = RSdict.get("Hostname").index(CLdata[i])
-            f = open("RESOLVED.txt", "a")
-            f.write(CLdata[i]+ " "+RSdict.get("IP Address")[index]+" "+RSdict.get("Flag")[index]+"\n")
+          index = RSdict.get("Hostname").index(CLdata[i])
+          f = open("RESOLVED.txt", "a")
+          f.write(CLdata[i]+ " "+RSdict.get("IP Address")[index]+" "+RSdict.get("Flag")[index]+"\n")
+        else:
+          csockid
         # else: go back to client with a string to lookup in ts.py but will have to open that socket too
             
     ss.close()
@@ -82,7 +92,7 @@ filelen = len(data)
 for i in range(3): #traversing over HN, IPADDR, FL, populates RSDict
   for j in range(filelen):
     if i+1 == 1:
-      RSdict['Hostname'].append(data[j][i])
+      RSdict['Hostname'].append(data[j][i].lower())
     if i+1 == 2:
       RSdict['IP Address'].append(data[j][i])
     if i+1 == 3:
