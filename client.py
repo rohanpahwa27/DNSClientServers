@@ -61,8 +61,8 @@ def client():
     #sends actual strings to root server (line by line)
     f = open("RESOLVED.txt", "a")
     for j in range(len(CLdict.get('Hostname'))):
-        datasent = CLdict.get('Hostname')[j].encode('utf-8')
-        cs.send(datasent)
+        datasent = CLdict.get('Hostname')[j]
+        cs.send(datasent.encode('utf-8'))
         time.sleep(0.1)
         data = cs.recv(1024).decode()
         if (data[len(data)-1] == 'A'):
