@@ -46,9 +46,9 @@ def server():
       if (lines[0].strip() in TSdict.get("Hostname")):
         index = TSdict.get("Hostname").index(lines[0].strip())
         csockid.send((lines[0].strip()+" "+TSdict.get("IP Address")[index]+" "+TSdict.get("Flag")[index]).encode())
-        print((lines[0].strip()+" "+TSdict.get("IP Address")[index]+" "+TSdict.get("Flag")[index]))
+        #print((lines[0].strip()+" "+TSdict.get("IP Address")[index]+" "+TSdict.get("Flag")[index]))
       else:
-        print(lines[0].strip()," not found in TS")
+        #print(lines[0].strip()," not found in TS")
         csockid.send(lines[0].strip().encode())
 
     ss.close()
@@ -67,6 +67,24 @@ while True:
 
 filelen = len(data)
 
+#removes last line of DNSRS where localhost is listed. appends it with tsHostname
+rsf =open("PROJI-DNSRS.txt","r")
+dlines=rsf.read()
+rsf.close()
+x=dlines.split("\n")
+s="\n".join(x[:-1])
+fd=open("PROJI-DNSRS.txt","w+")
+for i in range(len(s)):
+    fd.write(s[i])
+fd.close()
+
+#append with tsHostname at last line
+host = mysoc.gethostname()
+with open("PROJI-DNSRS.txt","a") as rsfile:
+  rsfile.write('\n')
+  rsfile.write(host + ' - NS')
+
+
 for i in range(3): #traversing over HN, IPADDR, FL, populates RSDict
   for j in range(filelen):
     if i+1 == 1:
@@ -77,6 +95,7 @@ for i in range(3): #traversing over HN, IPADDR, FL, populates RSDict
       TSdict['Flag'].append(data[j][i])
 
 
+
 #print(TSdict)
 
 
@@ -84,3 +103,5 @@ if (len(sys.argv) == 2):
   port = int(sys.argv[1])
   rsthread = threading.Thread(name='server', target=server)
   rsthread.start()
+
+f.close()

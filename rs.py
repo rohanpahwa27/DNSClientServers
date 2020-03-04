@@ -47,28 +47,25 @@ def server():
     CLdata = []
     #prints out the data received from client
     for j in range(lenth_of_client):
-        #print(RSdict.get('Hostname')[j])
         data = csockid.recv(1024).decode()
-        lines = data.strip()
-        print(lines)
-        #CLdata.append(lines)
+        lines = data.strip().lower()
         if(lines in RSdict.get("Hostname")):
           index = RSdict.get("Hostname").index(lines)
           csockid.send((lines+" "+RSdict.get("IP Address")[index]+" "+RSdict.get("Flag")[index]).encode())
-        else:
-          data += " - NS"
-          csockid.send(data.encode())
+        else: #send tsHostname back to client 
+          tsHostname = RSdict["Hostname"][filelen-1]
+          csockid.send(tsHostname.encode())
         # time.sleep(.1)
 
 
     # print(CLdata)
-    for i in range (len(CLdata)):
-        if(CLdata[i] in RSdict.get("Hostname")):
-          index = RSdict.get("Hostname").index(CLdata[i])
-          f = open("RESOLVED.txt", "a")
-          f.write(CLdata[i]+ " "+RSdict.get("IP Address")[index]+" "+RSdict.get("Flag")[index]+"\n")
-        else:
-          csockid
+    #for i in range (len(CLdata)):
+        #if(CLdata[i] in RSdict.get("Hostname")):
+          #index = RSdict.get("Hostname").index(CLdata[i])
+          #f = open("RESOLVED.txt", "a")
+          #f.write(CLdata[i]+ " "+RSdict.get("IP Address")[index]+" "+RSdict.get("Flag")[index]+"\n")
+        #else:
+          #csockid
         # else: go back to client with a string to lookup in ts.py but will have to open that socket too
             
     ss.close()
@@ -92,13 +89,15 @@ filelen = len(data)
 for i in range(3): #traversing over HN, IPADDR, FL, populates RSDict
   for j in range(filelen):
     if i+1 == 1:
-      RSdict['Hostname'].append(data[j][i].lower())
+      if j+1 == filelen:
+        RSdict['Hostname'].append(data[j][i]) #last entry isn't lower case due to tsHostname
+      else:  
+        RSdict['Hostname'].append(data[j][i].lower())
     if i+1 == 2:
       RSdict['IP Address'].append(data[j][i])
     if i+1 == 3:
       RSdict['Flag'].append(data[j][i])
 
-#print(RSdict)
 
 
 # how to read a text file in python
