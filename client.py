@@ -48,10 +48,7 @@ def client():
 
 
 
-    data_from_server=cs.recv(100)
- #receive data from the server
-
-    print("[C]: Data received from server::  ",data_from_server.decode('utf-8'))
+    
 
     #sends length of strings to send to root server to check if its there
     cs.send(str(len(CLdict.get('Hostname'))).encode())

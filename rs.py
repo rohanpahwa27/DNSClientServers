@@ -38,8 +38,6 @@ def server():
     csockid,addr=ss.accept()
     print ("[S]: Got a connection request from a client at", addr)
 # send a intro  message to the client.
-    msg="Welcome to CS 352"
-    csockid.send(msg.encode('utf-8')) 
 
     #gets length of strings being sent by client
     lenth_of_client = int(csockid.recv(1).decode())
