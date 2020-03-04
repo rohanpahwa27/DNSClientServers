@@ -28,7 +28,7 @@ def server():
         print("[S]: Server socket created")
     except mysoc.error as err:
         print(err)
-    server_binding=('',52800)
+    server_binding=('',int(port))
     ss.bind(server_binding)
     ss.listen(1)
     host=mysoc.gethostname()
@@ -111,6 +111,6 @@ for i in range(3): #traversing over HN, IPADDR, FL, populates RSDict
 #       break
 #     print ("".join(["Read a character:",c," ","hi"]))
 if (len(sys.argv) == 2):
-    if(sys.argv[1] == "rsListenPort"):
-        rsthread = threading.Thread(name='server', target=server)
-        rsthread.start()
+  port = sys.argv[1]
+  rsthread = threading.Thread(name='server', target=server)
+  rsthread.start()

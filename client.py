@@ -15,21 +15,6 @@ CLdict = defaultdict(list)
 
 # Structure of CLdict
 
-def clientToTs(host):
-    try:
-        ts=mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
-        print("[C]: Client socket created")
-    except mysoc.error as err:
-        print(err)
-    port = 52799
-    tsa_sameas_myaddr =mysoc.gethostbyname(mysoc.gethostname())
-# connect to the server on local machine
-    tsserver_binding=(tsa_sameas_myaddr,port)
-    ts.connect(tsserver_binding)
-    ts.send(host.encode())
-    ts.close()
-    exit()
-
 def client():
     try:
         cs=mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
@@ -38,8 +23,8 @@ def client():
         print(err)
 
 # Define the port on which you want to connect to the server
-    port = 52800
-    sa_sameas_myaddr =mysoc.gethostbyname(mysoc.gethostname())
+    port = rsport
+    sa_sameas_myaddr =mysoc.gethostbyname(host)
 # connect to the server on local machine
     server_binding=(sa_sameas_myaddr,port)
     cs.connect(server_binding)
@@ -52,7 +37,7 @@ def client():
         print("[C]: Client socket created")
     except mysoc.error as err:
         print(err)
-    port = 52799
+    port = tsport
     tsa_sameas_myaddr =mysoc.gethostbyname(mysoc.gethostname())
 # connect to the server on local machine
     tsserver_binding=(tsa_sameas_myaddr,port)
@@ -123,8 +108,10 @@ for j in range(filelen):
 
 
 if (len(sys.argv) == 4):
-    if (sys.argv[1] == "rsHostname" and sys.argv[2] == "rsListenPort" and sys.argv[3] == "tsListenPort"):
-        rsthread = threading.Thread(name='client', target=client)
-        rsthread.start()
+    host = sys.argv[1]
+    rsport = int(sys.argv[2])
+    tsport = int(sys.argv[3])
+    rsthread = threading.Thread(name='client', target=client)
+    rsthread.start()
         # input("Hit ENTER  to exit")
 # exit()
